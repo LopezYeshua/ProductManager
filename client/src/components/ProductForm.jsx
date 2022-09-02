@@ -1,37 +1,23 @@
-import '../App.css';
 import React, { useState } from 'react'
 import axios from 'axios';
 
 // Start of anonymous function
-export default () => {
-    const [title, setTitle] = useState("");
-    const [price, setPrice] = useState(0);
-    const [description, setDescription] = useState("");
+export default (props) => {
+    const {initialTitle, initialPrice, initialDescription, onSubmitProp } = props;
+    const [title, setTitle] = useState(initialTitle);
+    const [price, setPrice] = useState(initialPrice);
+    const [description, setDescription] = useState(initialDescription);
     const [successMsg, setSuccessMsg] = useState("");
 
     // Sends to api
     const onSubmitHandler = e => {
         e.preventDefault(); // prevents screen refresh
-        axios.post('http://localhost:8000/api/products', {
-            title,
-            price,
-            description
-        })
-        .then(res => console.log(res)) // on success
-        .catch(err => {
-            console.log(err);
-            setSuccessMsg("");
-        }) // on fail
-
-        setTitle('');
-        setDescription('');
-        setPrice(0);
-        setSuccessMsg("Success!")
+        onSubmitProp({title, price, description});
+        setSuccessMsg("Success!");
     }
 //  anonymous function returns form
     return (
         <form onSubmit={ onSubmitHandler }>
-            <h1>Add a Product</h1>
             <p className={successMsg != "" ? "success-msg":"" }>{successMsg}</p>
             <div>
                 <label>Title</label>
